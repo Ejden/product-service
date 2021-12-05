@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using product_service.Domain;
+using product_service.Infrastructure.Db;
 
 namespace product_service
 {
@@ -26,6 +28,7 @@ namespace product_service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(new ProductService(new InMemoryProductProvider()));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

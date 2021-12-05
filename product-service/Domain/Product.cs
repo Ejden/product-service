@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace product_service.Domain
 {
@@ -19,12 +18,15 @@ namespace product_service.Domain
 
         public Money Price { get; }
         
-        public Product(ProductId id, string name, DateTime version, int stock)
+        public Product(ProductId id, string name, string description, Attributes attributes, DateTime version, int stock, Money price)
         {
             Id = id;
             Name = name;
+            Description = description;
+            Attributes = attributes;
             Version = version;
             Stock = stock;
+            Price = price;
         }
     }
 }

@@ -1,20 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace product_service.Domain
 {
-    public class Attributes
+    public class Attributes : List<Attribute>
     {
-        private List<Attribute<Object>> Att;
-
-        public void addAtribute()
+        public IEnumerable GetAttributes()
         {
-            
+            return AsReadOnly();
         }
     }
 
-    public class Attribute<T>
-    {
-        
-    }
+    public record Attribute(string Key, string Value);
 }
