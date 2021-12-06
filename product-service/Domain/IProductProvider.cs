@@ -5,7 +5,7 @@ namespace product_service.Domain
 {
     public interface IProductProvider
     {
-        public ICollection<Product> GetAllProducts();
+        public ICollection<Product> GetAllProducts(bool onlyActive);
         
         public Product GetVersion(ProductId id, DateTime timestamp);
 

@@ -7,4 +7,4 @@ build_property.PublishSingleFile =
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
 build_property.RootNamespace = product_service
-build_property.ProjectDir = C:\Users\adria\RiderProjects\product-service\product-service\
+build_property.ProjectDir = /Users/adrian.stypinski/prv_projects/product-service/product-service/

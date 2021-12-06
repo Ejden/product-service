@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "w4Ghjn2E9KtxU0muRluEQIBDG8EL9uYEQhtgwevGe679TrO7GMrpsd2D14EoHAv/243oF2aHqqz39gWMQSttRA==",
+  "dgSpecHash": "TPTEYpW0nmlZeZqgPPuiartypLFyhJpND0bG1tNfmPHWoRqUryBzVQeUtuXCrGCOlMJxiYkC4Sxmz7W8pbHDJQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adria\\RiderProjects\\product-service\\product-service\\product-service.csproj",
+  "projectFilePath": "/Users/adrian.stypinski/prv_projects/product-service/product-service/product-service.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\adria\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.4\\microsoft.netcore.platforms.5.0.4.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+    "/Users/adrian.stypinski/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/Users/adrian.stypinski/.nuget/packages/microsoft.netcore.platforms/5.0.4/microsoft.netcore.platforms.5.0.4.nupkg.sha512",
+    "/Users/adrian.stypinski/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/Users/adrian.stypinski/.nuget/packages/swashbuckle.aspnetcore/5.6.3/swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "/Users/adrian.stypinski/.nuget/packages/swashbuckle.aspnetcore.swagger/5.6.3/swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "/Users/adrian.stypinski/.nuget/packages/swashbuckle.aspnetcore.swaggergen/5.6.3/swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "/Users/adrian.stypinski/.nuget/packages/swashbuckle.aspnetcore.swaggerui/5.6.3/swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
   ],
   "logs": []
 }

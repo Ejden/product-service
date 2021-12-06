@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using product_service.Domain;
 using product_service.Infrastructure.Db;
+using product_service.Infrastructure.ExceptionHandlers;
 
 namespace product_service
 {
@@ -28,7 +29,11 @@ namespace product_service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new ProductService(new InMemoryProductProvider()));
+            var productProvider = new InMemoryProductProvider();
+            var productValidator = new ProductValidator();
+            var productFactory = new ProductFactory();
+            var productService = new ProductService(productProvider, productValidator, productFactory);
+            services.AddSingleton(productService);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -45,6 +50,8 @@ namespace product_service
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "product_service v1"));
             }
+            
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseHttpsRedirection();
 

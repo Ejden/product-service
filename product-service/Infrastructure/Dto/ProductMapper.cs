@@ -9,7 +9,7 @@ namespace product_service.Infrastructure.Dto
         public static ProductDto ToDto(Product product)
         {
             return new ProductDto(
-                product.Id.Raw,
+                product.ProductId.Raw,
                 product.Name,
                 product.Description, 
                 product.Attributes.ToDto(),

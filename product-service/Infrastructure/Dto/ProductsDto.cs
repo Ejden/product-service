@@ -2,5 +2,5 @@
 
 namespace product_service.Infrastructure.Dto
 {
-    public record ProductsDto(List<ProductDto> products);
+    public record ProductsDto(List<ProductDto> Products);
 }

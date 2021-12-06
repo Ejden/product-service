@@ -1,4 +1,4 @@
 ﻿namespace product_service.Infrastructure.Dto
 {
-    public record MoneyDto(decimal amount, string currency);
+    public record MoneyDto(decimal Amount, string Currency);
 }

@@ -6,7 +6,7 @@ namespace product_service.Infrastructure.Db
 {
     public class DatabaseProductProvider : IProductProvider
     {
-        public ICollection<Product> GetAllProducts()
+        public ICollection<Product> GetAllProducts(bool onlyActive)
         {
             throw new NotImplementedException();
         }
