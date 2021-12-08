@@ -9,7 +9,7 @@ namespace product_service.Domain
         
         public Product GetVersion(ProductId id, DateTime timestamp);
         
-        public Product Insert(Product product);
+        public Product Create(Product product);
 
         public Product Update(Product product);
     }

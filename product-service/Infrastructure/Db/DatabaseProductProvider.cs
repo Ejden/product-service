@@ -63,7 +63,7 @@ namespace product_service.Infrastructure.Db
             }
         }
 
-        public Product Insert(Product product)
+        public Product Create(Product product)
         {
             var productToSave = _modelMapper.ToDocument(product);
             _productCollection.InsertOne(productToSave);

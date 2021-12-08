@@ -36,7 +36,7 @@ namespace product_service.Domain
         {
             _productValidator.ValidateNewProductRequest(newProductRequest);
             var product = _productFactory.CreateProduct(newProductRequest);
-            return _productProvider.Insert(product);
+            return _productProvider.Create(product);
         }
 
         public Product UpdateProduct(ProductId productId, UpdateProductRequest updateProductRequest)
@@ -45,7 +45,7 @@ namespace product_service.Domain
             var updatedProduct = _productFactory.CreateProduct(productToUpdate, updateProductRequest);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
             _productProvider.Update(oldProductVersion);
-            return _productProvider.Insert(updatedProduct);
+            return _productProvider.Create(updatedProduct);
         }
 
         public Product DecreaseStock(ProductId productId, int amount)
@@ -55,7 +55,7 @@ namespace product_service.Domain
             var updatedProduct = productToUpdate.DecreaseStock(amount);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
             _productProvider.Update(oldProductVersion);
-            return _productProvider.Insert(updatedProduct);
+            return _productProvider.Create(updatedProduct);
         }
 
         public Product DeactivateProduct(ProductId productId)

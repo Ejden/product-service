@@ -32,7 +32,7 @@ namespace product_service.Infrastructure.Db
             return product;
         }
 
-        public Product Insert(Product product)
+        public Product Create(Product product)
         {
             var newProduct = new Product(
                 product.VersionId ?? ProductVersionId.Of(_versionIdGenerator.GenerateId()), 
