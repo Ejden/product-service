@@ -36,8 +36,8 @@ namespace product_service.Infrastructure.Db.Models
         public ProductDocument ToDocument(Product product)
         {
             return new ProductDocument(
-                versionId: product.VersionId.Raw,
-                productId: product.ProductId.Raw,
+                versionId: product.VersionId?.Raw ?? Guid.NewGuid().ToString(),
+                productId: product.ProductId?.Raw ?? Guid.NewGuid().ToString(),
                 name: product.Name,
                 description: product.Description,
                 attributes: ToDocument(product.Attributes),
@@ -50,7 +50,7 @@ namespace product_service.Infrastructure.Db.Models
 
         private ICollection<AttributeDocument> ToDocument(Attributes attributes)
         {
-            return attributes.GetAttributes().OfType<AttributeDocument>()
+            return attributes.GetAttributes().OfType<Attribute>()
                 .Select(it => new AttributeDocument(it.Key, it.Value))
                 .ToList();
         }

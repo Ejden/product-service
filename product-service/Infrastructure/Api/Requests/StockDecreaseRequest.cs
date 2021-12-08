@@ -1,4 +1,4 @@
 namespace product_service.Infrastructure.Api.Requests
 {
-    public record StockDecreaseRequest(int Amount);
+    public record StockDecreaseRequest(int DecreaseBy);
 }

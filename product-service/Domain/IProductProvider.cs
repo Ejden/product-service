@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using product_service.Infrastructure.Db.Models;
 
 namespace product_service.Domain
 {
@@ -10,9 +8,9 @@ namespace product_service.Domain
         public ICollection<Product> GetAllProducts(bool onlyActive);
         
         public Product GetVersion(ProductId id, DateTime timestamp);
+        
+        public Product Insert(Product product);
 
-        public Task<List<ProductDocument>> Get();
-
-        public void Save(Product product);
+        public Product Update(Product product);
     }
 }

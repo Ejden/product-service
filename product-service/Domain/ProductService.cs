@@ -32,42 +32,37 @@ namespace product_service.Domain
             return _productProvider.GetVersion(productId, version);
         }
 
-        public void CreateProduct(NewProductRequest newProductRequest)
+        public Product CreateProduct(NewProductRequest newProductRequest)
         {
             _productValidator.ValidateNewProductRequest(newProductRequest);
             var product = _productFactory.CreateProduct(newProductRequest);
-            // return _productProvider.Save(product);
+            return _productProvider.Insert(product);
         }
 
-        public async Task<List<ProductDocument>> Get()
-        {
-            return await _productProvider.Get();
-        }
-
-        public void UpdateProduct(ProductId productId, UpdateProductRequest updateProductRequest)
+        public Product UpdateProduct(ProductId productId, UpdateProductRequest updateProductRequest)
         {
             var productToUpdate = _productProvider.GetVersion(productId, DateTime.Now);
             var updatedProduct = _productFactory.CreateProduct(productToUpdate, updateProductRequest);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
-            _productProvider.Save(oldProductVersion);
-            // return _productProvider.Save(updatedProduct);
+            _productProvider.Update(oldProductVersion);
+            return _productProvider.Insert(updatedProduct);
         }
 
-        public void DecreaseStock(ProductId productId, int amount)
+        public Product DecreaseStock(ProductId productId, int amount)
         {
             var productToUpdate = _productProvider.GetVersion(productId, DateTime.Now);
             _productValidator.ValidateStockDecrease(productToUpdate, amount);
             var updatedProduct = productToUpdate.DecreaseStock(amount);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
-            _productProvider.Save(oldProductVersion);
-            // return _productProvider.Save(updatedProduct);
+            _productProvider.Update(oldProductVersion);
+            return _productProvider.Insert(updatedProduct);
         }
 
-        public void DeactivateProduct(ProductId productId)
+        public Product DeactivateProduct(ProductId productId)
         {
             var product = _productProvider.GetVersion(productId, DateTime.Now);
             product = product.Deactivate();
-            _productProvider.Save(product);
+            return _productProvider.Update(product);
         }
     }
 }

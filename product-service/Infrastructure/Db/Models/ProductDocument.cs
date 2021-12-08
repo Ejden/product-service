@@ -8,7 +8,7 @@ namespace product_service.Infrastructure.Db.Models
     public class ProductDocument
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonRepresentation(BsonType.String)]
         #nullable enable
         public string? VersionId { get; set; }
         #nullable disable
@@ -32,7 +32,7 @@ namespace product_service.Infrastructure.Db.Models
         public ProductDocument() {}
 
         #nullable enable
-        public ProductDocument(string? versionId, string productId, string name, string description, ICollection<AttributeDocument> attributes, DateTime version, DateTime? activeTo, int stock, MoneyDocument price)
+        public ProductDocument(string? versionId, string? productId, string name, string description, ICollection<AttributeDocument> attributes, DateTime version, DateTime? activeTo, int stock, MoneyDocument price)
         {
             VersionId = versionId;
             ProductId = productId;

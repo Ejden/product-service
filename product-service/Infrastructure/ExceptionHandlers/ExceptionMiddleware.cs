@@ -24,12 +24,24 @@ namespace product_service.Infrastructure.ExceptionHandlers
             {
                 await HandleExceptionAsync(httpContext, cause);
             }
+            catch (ValidationException cause)
+            {
+                await HandleExceptionAsync(httpContext, cause);
+            }
         }
 
         private Task HandleExceptionAsync(HttpContext context, ProductNotFoundException cause)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+
+            return context.Response.WriteAsync(new ErrorDetails(cause.Message).ToJson());
+        }
+        
+        private Task HandleExceptionAsync(HttpContext context, ValidationException cause)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int) HttpStatusCode.Conflict;
 
             return context.Response.WriteAsync(new ErrorDetails(cause.Message).ToJson());
         }

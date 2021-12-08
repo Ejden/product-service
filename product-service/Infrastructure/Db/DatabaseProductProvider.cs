@@ -23,7 +23,6 @@ namespace product_service.Infrastructure.Db
             var mongoClient = new MongoClient(props.Value.ConnectionString);
             var mongoDb = mongoClient.GetDatabase(props.Value.DatabaseName);
             _productCollection = mongoDb.GetCollection<ProductDocument>(props.Value.ProductsCollectionName);
-            Console.WriteLine("DEBUG " + props.Value.ConnectionString + " " + props.Value.DatabaseName + " " + props.Value.ProductsCollectionName);
         }
 
         public ICollection<Product> GetAllProducts(bool onlyActive)
@@ -31,11 +30,6 @@ namespace product_service.Infrastructure.Db
             return onlyActive ? GetActiveProducts() : GetAllVersionsOfProducts();
         }
 
-        public async Task<List<ProductDocument>> Get()
-        {
-            return await _productCollection.Find(_ => true).ToListAsync();
-        }
-        
         private ICollection<Product> GetActiveProducts()
         {
             var now = DateTime.Now;
@@ -55,15 +49,32 @@ namespace product_service.Infrastructure.Db
         
         public Product GetVersion(ProductId id, DateTime timestamp)
         {
-            return _productCollection
-                .Find(it => it.ProductId == id.Raw && it.VersionActiveAt(timestamp))
-                .Project(it => _modelMapper.ToDomain(it))
-                .Single();
+            try
+            {
+                return _productCollection
+                    .Find(it => it.ProductId == id.Raw && timestamp >= it.Version &&
+                                (it.ActiveTo == null || timestamp < it.ActiveTo))
+                    .Project(it => _modelMapper.ToDomain(it))
+                    .Single();
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ProductNotFoundException($"Product with id {id.Raw} not found");
+            }
         }
 
-        public void Save(Product product)
-        { 
-            _productCollection.InsertOne(_modelMapper.ToDocument(product));
+        public Product Insert(Product product)
+        {
+            var productToSave = _modelMapper.ToDocument(product);
+            _productCollection.InsertOne(productToSave);
+            return GetVersion(ProductId.Of(productToSave.ProductId), productToSave.Version);
+        }
+
+        public Product Update(Product product)
+        {
+            var productToSave = _modelMapper.ToDocument(product);
+            _productCollection.ReplaceOne(it => it.VersionId == product.VersionId.Raw, productToSave);
+            return GetVersion(ProductId.Of(productToSave.ProductId), product.Version);
         }
     }
 }

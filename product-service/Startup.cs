@@ -8,6 +8,7 @@ using product_service.Domain;
 using product_service.Infrastructure.Db;
 using product_service.Infrastructure.Db.Config;
 using product_service.Infrastructure.Db.Models;
+using product_service.Infrastructure.Api.Dto;
 using product_service.Infrastructure.ExceptionHandlers;
 
 namespace product_service
@@ -25,16 +26,11 @@ namespace product_service
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ProductServiceDatabaseProperties>(Configuration.GetSection("ProductServiceDatabase"));
-            services.AddScoped<ModelMapper>();
-            services.AddScoped<IProductProvider, DatabaseProductProvider>();
-            services.AddScoped<ProductValidator>();
-            services.AddScoped<ProductFactory>();
-            services.AddScoped<ProductService>();
-            // var productProvider = new InMemoryProductProvider();
-            // var productValidator = new ProductValidator();
-            // var productFactory = new ProductFactory();
-            // var productService = new ProductService(productProvider, productValidator, productFactory);
-            // services.AddSingleton(productService);
+            services.AddSingleton<ModelMapper>();
+            services.AddSingleton<IProductProvider, DatabaseProductProvider>();
+            services.AddSingleton<ProductValidator>();
+            services.AddSingleton<ProductFactory>();
+            services.AddSingleton<ProductService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

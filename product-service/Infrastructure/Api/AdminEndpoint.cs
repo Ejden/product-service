@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using product_service.Domain;
 using product_service.Infrastructure.Api.Requests;
 

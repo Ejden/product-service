@@ -2,7 +2,7 @@
 using System.Linq;
 using product_service.Domain;
 
-namespace product_service.Infrastructure.Dto
+namespace product_service.Infrastructure.Api.Dto
 {
     public static class ProductMapper
     {
