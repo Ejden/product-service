@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using product_service.Domain;
 using product_service.Infrastructure.Db;
+using product_service.Infrastructure.Db.Config;
+using product_service.Infrastructure.Db.Models;
 using product_service.Infrastructure.ExceptionHandlers;
 
 namespace product_service
@@ -29,11 +24,17 @@ namespace product_service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var productProvider = new InMemoryProductProvider();
-            var productValidator = new ProductValidator();
-            var productFactory = new ProductFactory();
-            var productService = new ProductService(productProvider, productValidator, productFactory);
-            services.AddSingleton(productService);
+            services.Configure<ProductServiceDatabaseProperties>(Configuration.GetSection("ProductServiceDatabase"));
+            services.AddScoped<ModelMapper>();
+            services.AddScoped<IProductProvider, DatabaseProductProvider>();
+            services.AddScoped<ProductValidator>();
+            services.AddScoped<ProductFactory>();
+            services.AddScoped<ProductService>();
+            // var productProvider = new InMemoryProductProvider();
+            // var productValidator = new ProductValidator();
+            // var productFactory = new ProductFactory();
+            // var productService = new ProductService(productProvider, productValidator, productFactory);
+            // services.AddSingleton(productService);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -54,7 +55,7 @@ namespace product_service
             app.ConfigureCustomExceptionMiddleware();
 
             app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();

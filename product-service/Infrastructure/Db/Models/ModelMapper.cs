@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using product_service.Domain;
+using Attribute = product_service.Domain.Attribute;
+
+namespace product_service.Infrastructure.Db.Models
+{
+    public class ModelMapper
+    {
+        public Product ToDomain(ProductDocument productDocument)
+        {
+            return new Product(
+                versionId: new ProductVersionId(productDocument.VersionId),
+                productId: new ProductId(productDocument.ProductId),
+                name: productDocument.Name,
+                description: productDocument.Description,
+                attributes: ToDomain(productDocument.Attributes),
+                version: productDocument.Version,
+                activeTo: productDocument.ActiveTo,
+                stock: productDocument.Stock,
+                price: ToDomain(productDocument.Price)
+            );
+        }
+
+        private Attributes ToDomain(ICollection<AttributeDocument> attributes)
+        {
+            return new Attributes(attributes.Select(attribute => new Attribute(attribute.Key, attribute.Value)).ToList());
+        }
+
+        private Money ToDomain(MoneyDocument money)
+        {
+            return new Money(money.Amount, Enum.Parse<Currency>(money.Currency));
+        }
+
+        public ProductDocument ToDocument(Product product)
+        {
+            return new ProductDocument(
+                versionId: product.VersionId.Raw,
+                productId: product.ProductId.Raw,
+                name: product.Name,
+                description: product.Description,
+                attributes: ToDocument(product.Attributes),
+                version: product.Version,
+                activeTo: product.ActiveTo,
+                stock: product.Stock,
+                price: ToDocument(product.Price)
+            );
+        }
+
+        private ICollection<AttributeDocument> ToDocument(Attributes attributes)
+        {
+            return attributes.GetAttributes().OfType<AttributeDocument>()
+                .Select(it => new AttributeDocument(it.Key, it.Value))
+                .ToList();
+        }
+
+        private MoneyDocument ToDocument(Money money)
+        {
+            return new MoneyDocument(money.Amount, money.Currency.ToString());
+        }
+    }
+}

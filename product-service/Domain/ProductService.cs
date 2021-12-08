@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using product_service.Infrastructure.Api.Requests;
+using product_service.Infrastructure.Db.Models;
 
 namespace product_service.Domain
 {
@@ -30,29 +32,35 @@ namespace product_service.Domain
             return _productProvider.GetVersion(productId, version);
         }
 
-        public Product CreateProduct(NewProductRequest newProductRequest)
+        public void CreateProduct(NewProductRequest newProductRequest)
         {
             _productValidator.ValidateNewProductRequest(newProductRequest);
             var product = _productFactory.CreateProduct(newProductRequest);
-            return _productProvider.Save(product);
+            // return _productProvider.Save(product);
         }
 
-        public Product UpdateProduct(ProductId productId, UpdateProductRequest updateProductRequest)
+        public async Task<List<ProductDocument>> Get()
+        {
+            return await _productProvider.Get();
+        }
+
+        public void UpdateProduct(ProductId productId, UpdateProductRequest updateProductRequest)
         {
             var productToUpdate = _productProvider.GetVersion(productId, DateTime.Now);
             var updatedProduct = _productFactory.CreateProduct(productToUpdate, updateProductRequest);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
             _productProvider.Save(oldProductVersion);
-            return _productProvider.Save(updatedProduct);
+            // return _productProvider.Save(updatedProduct);
         }
 
-        public Product DecreaseStock(ProductId productId, int amount)
+        public void DecreaseStock(ProductId productId, int amount)
         {
             var productToUpdate = _productProvider.GetVersion(productId, DateTime.Now);
+            _productValidator.ValidateStockDecrease(productToUpdate, amount);
             var updatedProduct = productToUpdate.DecreaseStock(amount);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
             _productProvider.Save(oldProductVersion);
-            return _productProvider.Save(updatedProduct);
+            // return _productProvider.Save(updatedProduct);
         }
 
         public void DeactivateProduct(ProductId productId)

@@ -50,7 +50,7 @@ namespace product_service.Domain
 
         public bool versionActiveAt(DateTime timestamp)
         {
-            return timestamp >= Version && (ActiveTo == null || ActiveTo < timestamp);
+            return timestamp >= Version && (ActiveTo == null || timestamp < ActiveTo);
         }
 
         public bool isActive()

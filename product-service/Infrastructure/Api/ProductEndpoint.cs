@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using product_service.Domain;
 using product_service.Infrastructure.Api.Requests;
+using product_service.Infrastructure.Db;
+using product_service.Infrastructure.Db.Models;
 using product_service.Infrastructure.Dto;
 
 namespace product_service.Infrastructure.Api
@@ -24,9 +28,18 @@ namespace product_service.Infrastructure.Api
         [HttpGet]
         public IActionResult GetProducts([FromQuery] bool onlyActive = true)
         {
+            Console.WriteLine("ASD");
             return Ok(ProductMapper.ToDto(_productService.GetProducts(onlyActive)));
         }
 
+        [HttpGet]
+        [Route("/as")]
+        public async Task<List<ProductDocument>> Get()
+        {
+            return await _productService.Get();
+        }
+
+        #nullable enable
         [HttpGet]
         [Route("/{productId}")]
         public IActionResult GetProductVersion(string productId, [FromQuery] string? version)
@@ -36,12 +49,15 @@ namespace product_service.Infrastructure.Api
                 version == null ? DateTime.Now : DateTime.Parse(version))
             ));
         }
+        #nullable restore
 
         [HttpPost]
         [Route("/{productId}")]
         public IActionResult UpdateProduct(string productId, [FromBody] UpdateProductRequest request)
         {
-            return Ok(ProductMapper.ToDto(_productService.UpdateProduct(ProductId.Of(productId), request)));
+            // return Ok(ProductMapper.ToDto(_productService.UpdateProduct(ProductId.Of(productId), request)));
+            _productService.UpdateProduct(ProductId.Of(productId), request);
+            return Ok();
         }
 
         [HttpDelete]
@@ -56,13 +72,17 @@ namespace product_service.Infrastructure.Api
         [Route("/{productId}/stock")]
         public IActionResult DecreaseStock(string productId, [FromBody] StockDecreaseRequest request)
         {
-            return Ok(_productService.DecreaseStock(ProductId.Of(productId), request.Amount));
+            // return Ok(ProductMapper.ToDto(_productService.DecreaseStock(ProductId.Of(productId), request.Amount)));
+            _productService.DecreaseStock(ProductId.Of(productId), request.Amount);
+            return Ok();
         }
         
         [HttpPost]
         public IActionResult CreateProduct(NewProductRequest request)
         {
-            return Ok(ProductMapper.ToDto(_productService.CreateProduct(request)));
+            // return Ok(ProductMapper.ToDto(_productService.CreateProduct(request)));
+            _productService.CreateProduct(request);
+            return Ok();
         }
     }
 }

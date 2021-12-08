@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using product_service.Domain;
+using product_service.Infrastructure.Db.Models;
 using product_service.Infrastructure.Utils;
 
 namespace product_service.Infrastructure.Db
@@ -32,7 +34,12 @@ namespace product_service.Infrastructure.Db
             return product;
         }
 
-        public Product Save(Product product)
+        public Task<List<ProductDocument>> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(Product product)
         {
             var newProduct = new Product(
                 product.VersionId ?? ProductVersionId.Of(_versionIdGenerator.GenerateId()), 
@@ -40,12 +47,12 @@ namespace product_service.Infrastructure.Db
                 product.Name,
                 product.Description,
                 product.Attributes,
-                DateTime.Now,
+                product.Version,
+                product.ActiveTo,
                 product.Stock,
                 product.Price
             );
             _products[newProduct.VersionId.Raw] = newProduct;
-            return newProduct;
         }
     }
 }

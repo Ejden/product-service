@@ -15,6 +15,20 @@ namespace product_service.Domain
             ValidateProductPrice(request.Price);
         }
 
+        public void ValidateStockDecrease(Product product, int decreaseBy)
+        {
+            ValidateThatProductIsActive(product);
+            ValidateProductStock(product.Stock - decreaseBy);
+        }
+
+        private void ValidateThatProductIsActive(Product product)
+        {
+            if (!product.isActive())
+            {
+                throw new ValidationException("Product is inactive");
+            }
+        }
+
         private void ValidateProductName(string name)
         {
             ValidateStringLength(name);
@@ -38,9 +52,9 @@ namespace product_service.Domain
 
         private void ValidateProductStock(int stock)
         {
-            if (stock <= 0)
+            if (stock < 0)
             {
-                throw new ValidationException("Stock should be grater than 0");
+                throw new ValidationException("Stock should be grater or equal 0");
             }
         }
 
