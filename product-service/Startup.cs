@@ -7,8 +7,6 @@ using Microsoft.OpenApi.Models;
 using product_service.Domain;
 using product_service.Infrastructure.Db;
 using product_service.Infrastructure.Db.Config;
-using product_service.Infrastructure.Db.Models;
-using product_service.Infrastructure.Api.Dto;
 using product_service.Infrastructure.ExceptionHandlers;
 
 namespace product_service
@@ -25,8 +23,7 @@ namespace product_service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ProductServiceDatabaseProperties>(Configuration.GetSection("ProductServiceDatabase"));
-            services.AddSingleton<ModelMapper>();
+            services.Configure<ProductServiceDatabaseProperties>(Configuration.GetSection("ProductDatabase"));
             services.AddSingleton<IProductProvider, DatabaseProductProvider>();
             services.AddSingleton<ProductValidator>();
             services.AddSingleton<ProductFactory>();

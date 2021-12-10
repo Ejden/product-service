@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -13,49 +13,46 @@ namespace product_service.Infrastructure.Db
     public class DatabaseProductProvider : IProductProvider
     {
         private readonly IMongoCollection<ProductDocument> _productCollection;
-        private readonly ModelMapper _modelMapper;
         
-        public DatabaseProductProvider(
-            IOptions<ProductServiceDatabaseProperties> props,
-            ModelMapper modelMapper)
+        public DatabaseProductProvider(IOptions<ProductServiceDatabaseProperties> props)
         {
-            _modelMapper = modelMapper;
             var mongoClient = new MongoClient(props.Value.ConnectionString);
             var mongoDb = mongoClient.GetDatabase(props.Value.DatabaseName);
             _productCollection = mongoDb.GetCollection<ProductDocument>(props.Value.ProductsCollectionName);
         }
 
-        public ICollection<Product> GetAllProducts(bool onlyActive)
+        public async Task<ICollection<Product>> GetAllProducts(bool onlyActive)
         {
-            return onlyActive ? GetActiveProducts() : GetAllVersionsOfProducts();
+            return onlyActive ? await GetActiveProducts() : await GetAllVersionsOfProducts();
         }
 
-        private ICollection<Product> GetActiveProducts()
+        private async Task<ICollection<Product>> GetActiveProducts()
         {
             var now = DateTime.Now;
-            return _productCollection
-                .Find(it => now >= it.Version && (it.ActiveTo == null || now < it.ActiveTo))
-                .Project(it => _modelMapper.ToDomain(it))
-                .ToList();
+
+            var result = await _productCollection
+                .FindAsync(it => now >= it.Version && (it.ActiveTo == null || now < it.ActiveTo));
+
+            return result.ToList().Select(ModelMapper.ToDomain).ToList();
         }
 
-        private ICollection<Product> GetAllVersionsOfProducts()
+        private async Task<ICollection<Product>> GetAllVersionsOfProducts()
         {
-            return _productCollection
-                .Find(_ => true)
-                .Project(it => _modelMapper.ToDomain(it))
-                .ToList();
+            var result = await _productCollection
+                .FindAsync(_ => true);
+
+            return result.ToList().Select(ModelMapper.ToDomain).ToList();
         }
         
-        public Product GetVersion(ProductId id, DateTime timestamp)
+        public async Task<Product> GetVersion(ProductId id, DateTime timestamp)
         {
             try
             {
-                return _productCollection
-                    .Find(it => it.ProductId == id.Raw && timestamp >= it.Version &&
-                                (it.ActiveTo == null || timestamp < it.ActiveTo))
-                    .Project(it => _modelMapper.ToDomain(it))
-                    .Single();
+                var result = await _productCollection
+                    .FindAsync(it => it.ProductId == id.Raw && timestamp >= it.Version &&
+                                     (it.ActiveTo == null || timestamp < it.ActiveTo));
+
+                return ModelMapper.ToDomain(result.First());
             }
             catch (InvalidOperationException)
             {
@@ -63,18 +60,18 @@ namespace product_service.Infrastructure.Db
             }
         }
 
-        public Product Create(Product product)
+        public async Task<Product> Create(Product product)
         {
-            var productToSave = _modelMapper.ToDocument(product);
-            _productCollection.InsertOne(productToSave);
-            return GetVersion(ProductId.Of(productToSave.ProductId), productToSave.Version);
+            var productToSave = ModelMapper.ToDocument(product);
+            await _productCollection.InsertOneAsync(productToSave);
+            return await GetVersion(ProductId.Of(productToSave.ProductId), productToSave.Version);
         }
 
-        public Product Update(Product product)
+        public async Task<Product> Update(Product product)
         {
-            var productToSave = _modelMapper.ToDocument(product);
-            _productCollection.ReplaceOne(it => it.VersionId == product.VersionId.Raw, productToSave);
-            return GetVersion(ProductId.Of(productToSave.ProductId), product.Version);
+            var productToSave = ModelMapper.ToDocument(product);
+            await _productCollection.ReplaceOneAsync(it => it.VersionId == product.VersionId.Raw, productToSave);
+            return await GetVersion(ProductId.Of(productToSave.ProductId), product.Version);
         }
     }
 }

@@ -6,9 +6,9 @@ using Attribute = product_service.Domain.Attribute;
 
 namespace product_service.Infrastructure.Db.Models
 {
-    public class ModelMapper
+    public abstract class ModelMapper
     {
-        public Product ToDomain(ProductDocument productDocument)
+        public static Product ToDomain(ProductDocument productDocument)
         {
             return new Product(
                 versionId: new ProductVersionId(productDocument.VersionId),
@@ -23,17 +23,17 @@ namespace product_service.Infrastructure.Db.Models
             );
         }
 
-        private Attributes ToDomain(ICollection<AttributeDocument> attributes)
+        private static Attributes ToDomain(ICollection<AttributeDocument> attributes)
         {
             return new Attributes(attributes.Select(attribute => new Attribute(attribute.Key, attribute.Value)).ToList());
         }
 
-        private Money ToDomain(MoneyDocument money)
+        private static Money ToDomain(MoneyDocument money)
         {
             return new Money(money.Amount, Enum.Parse<Currency>(money.Currency));
         }
 
-        public ProductDocument ToDocument(Product product)
+        public static ProductDocument ToDocument(Product product)
         {
             return new ProductDocument(
                 versionId: product.VersionId?.Raw ?? Guid.NewGuid().ToString(),
@@ -48,14 +48,14 @@ namespace product_service.Infrastructure.Db.Models
             );
         }
 
-        private ICollection<AttributeDocument> ToDocument(Attributes attributes)
+        private static ICollection<AttributeDocument> ToDocument(Attributes attributes)
         {
             return attributes.GetAttributes().OfType<Attribute>()
                 .Select(it => new AttributeDocument(it.Key, it.Value))
                 .ToList();
         }
 
-        private MoneyDocument ToDocument(Money money)
+        private static MoneyDocument ToDocument(Money money)
         {
             return new MoneyDocument(money.Amount, money.Currency.ToString());
         }

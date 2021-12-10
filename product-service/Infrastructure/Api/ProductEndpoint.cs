@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using product_service.Domain;
@@ -22,17 +23,17 @@ namespace product_service.Infrastructure.Api
         }
 
         [HttpGet]
-        public IActionResult GetProducts([FromQuery] bool onlyActive = true)
+        public async Task<IActionResult> GetProducts([FromQuery] bool onlyActive = true)
         {
-            return Ok(ProductMapper.ToDto(_productService.GetProducts(onlyActive)));
+            return Ok(ProductMapper.ToDto(await _productService.GetProducts(onlyActive)));
         }
 
         #nullable enable
         [HttpGet]
-        [Route("/{productId}")]
-        public IActionResult GetProductVersion(string productId, [FromQuery] string? version)
+        [Route("{productId}")]
+        public async Task<IActionResult> GetProductVersion(string productId, [FromQuery] string? version)
         {
-            return Ok(ProductMapper.ToDto(_productService.GetProductVersion(
+            return Ok(ProductMapper.ToDto(await _productService.GetProductVersion(
                 ProductId.Of(productId),
                 version == null ? DateTime.Now : DateTime.Parse(version))
             ));
@@ -40,31 +41,31 @@ namespace product_service.Infrastructure.Api
         #nullable disable
 
         [HttpPost]
-        [Route("/{productId}")]
-        public IActionResult UpdateProduct(string productId, [FromBody] UpdateProductRequest request)
+        [Route("{productId}")]
+        public async Task<IActionResult> UpdateProduct(string productId, [FromBody] UpdateProductRequest request)
         {
-            return Ok(ProductMapper.ToDto(_productService.UpdateProduct(ProductId.Of(productId), request)));
+            return Ok(ProductMapper.ToDto(await _productService.UpdateProduct(ProductId.Of(productId), request)));
         }
 
         [HttpDelete]
-        [Route("/{productId}")]
-        public IActionResult DeactivateProduct(string productId)
+        [Route("{productId}")]
+        public async Task<IActionResult> DeactivateProduct(string productId)
         {
-            _productService.DeactivateProduct(ProductId.Of(productId));
+            await _productService.DeactivateProduct(ProductId.Of(productId));
             return Ok();
         }
 
         [HttpPost]
-        [Route("/{productId}/stock")]
-        public IActionResult DecreaseStock(string productId, [FromBody] StockDecreaseRequest request)
+        [Route("{productId}/stock")]
+        public async Task<IActionResult> DecreaseStock(string productId, [FromBody] StockDecreaseRequest request)
         {
-            return Ok(ProductMapper.ToDto(_productService.DecreaseStock(ProductId.Of(productId), request.DecreaseBy)));
+            return Ok(ProductMapper.ToDto(await _productService.DecreaseStock(ProductId.Of(productId), request.DecreaseBy)));
         }
         
         [HttpPost]
-        public IActionResult CreateProduct(NewProductRequest request)
+        public async Task<IActionResult> CreateProduct(NewProductRequest request)
         {
-            return Ok(ProductMapper.ToDto(_productService.CreateProduct(request)));
+            return Ok(ProductMapper.ToDto(await _productService.CreateProduct(request)));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using product_service.Domain;
 using product_service.Infrastructure.Utils;
 
@@ -12,16 +13,16 @@ namespace product_service.Infrastructure.Db
         private readonly FakeIdGenerator _idGenerator = new();
         private readonly FakeIdGenerator _versionIdGenerator = new();
 
-        public ICollection<Product> GetAllProducts(bool onlyActive)
+        public Task<ICollection<Product>> GetAllProducts(bool onlyActive)
         {
             if (onlyActive)
             {
-                return _products.Values.Where(product => product.isActive()).ToList();
+                return Task.FromResult<ICollection<Product>>(_products.Values.Where(product => product.isActive()).ToList());
             }
-            return _products.Values;
+            return Task.FromResult<ICollection<Product>>(_products.Values);
         }
         
-        public Product GetVersion(ProductId id, DateTime timestamp)
+        public Task<Product> GetVersion(ProductId id, DateTime timestamp)
         {
             var product = _products.Values.ToList().Find(product => product.ProductId == id && product.versionActiveAt(timestamp));
             if (product == null)
@@ -29,10 +30,10 @@ namespace product_service.Infrastructure.Db
                 throw new ProductNotFoundException("Product with id " + id.Raw + " not found");
             }
 
-            return product;
+            return Task.FromResult(product);
         }
 
-        public Product Create(Product product)
+        public Task<Product> Create(Product product)
         {
             var newProduct = new Product(
                 product.VersionId ?? ProductVersionId.Of(_versionIdGenerator.GenerateId()), 
@@ -47,10 +48,10 @@ namespace product_service.Infrastructure.Db
             );
 
             _products[newProduct.VersionId.Raw] = newProduct;
-            return newProduct;
+            return Task.FromResult(newProduct);
         }
 
-        public Product Update(Product product)
+        public Task<Product> Update(Product product)
         {
             var newProduct = new Product(
                 product.VersionId,
@@ -65,7 +66,7 @@ namespace product_service.Infrastructure.Db
             );
 
             _products[product.VersionId.Raw] = newProduct;
-            return newProduct;
+            return Task.FromResult(newProduct);
         }
     }
 }

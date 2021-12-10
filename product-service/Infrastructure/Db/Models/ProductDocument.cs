@@ -9,24 +9,33 @@ namespace product_service.Infrastructure.Db.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.String)]
+        [BsonElement("versionId")]
         #nullable enable
         public string? VersionId { get; set; }
         #nullable disable
         
+        [BsonElement("productId")]
         public string ProductId { get; set; }
         
+        [BsonElement("name")]
         public string Name { get; set; }
         
+        [BsonElement("description")]
         public string Description { get; set; }
 
+        [BsonElement("attributes")]
         public ICollection<AttributeDocument> Attributes { get; set; }
         
+        [BsonElement("version")]
         public DateTime Version { get; set; }
         
+        [BsonElement("activeTo")]
         public DateTime? ActiveTo { get; set; }
         
+        [BsonElement("stock")]
         public int Stock { get; set; }
         
+        [BsonElement("price")]
         public MoneyDocument Price { get; set; }
 
         public ProductDocument() {}

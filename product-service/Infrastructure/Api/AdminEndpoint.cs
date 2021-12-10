@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using product_service.Domain;
 using product_service.Infrastructure.Api.Requests;
@@ -19,23 +20,23 @@ namespace product_service.Infrastructure.Api
 
         [HttpPost]
         [Route("/generate-default-products")]
-        public IActionResult GenerateDefaultProducts()
+        public async Task<IActionResult> GenerateDefaultProducts()
         {
-            _productService.CreateProduct(new NewProductRequest(
+            await _productService.CreateProduct(new NewProductRequest(
                 "PearPhone 11",
                 "Super telefon",
                 new List<AttributeRequest> { new("color", "Czarny") },
                 50,
                 new MoneyRequest(2500.25m, "PLN")
             ));
-            _productService.CreateProduct(new NewProductRequest(
+            await _productService.CreateProduct(new NewProductRequest(
                 "PearPad 5",
                 "Super tablet",
                 new List<AttributeRequest> { new("color", "Czarny") },
                 111,
                 new MoneyRequest(1500.25m, "PLN")
             ));
-            _productService.CreateProduct(new NewProductRequest(
+            await _productService.CreateProduct(new NewProductRequest(
                 "PearBook Pro",
                 "Super telefon",
                 new List<AttributeRequest> { new("color", "Czarny") },
