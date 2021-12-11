@@ -60,14 +60,14 @@ namespace product_service.Infrastructure.Db
             }
         }
 
-        public async Task<Product> Create(Product product)
+        public async Task<Product> CreateProduct(Product product)
         {
             var productToSave = ModelMapper.ToDocument(product);
             await _productCollection.InsertOneAsync(productToSave);
             return await GetVersion(ProductId.Of(productToSave.ProductId), productToSave.Version);
         }
 
-        public async Task<Product> Update(Product product)
+        public async Task<Product> UpdateProduct(Product product)
         {
             var productToSave = ModelMapper.ToDocument(product);
             await _productCollection.ReplaceOneAsync(it => it.VersionId == product.VersionId.Raw, productToSave);

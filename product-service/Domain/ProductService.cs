@@ -37,7 +37,7 @@ namespace product_service.Domain
             _productValidator.ValidateNewProductRequest(newProductRequest);
             
             var product = _productFactory.CreateProduct(newProductRequest);
-            return await _productProvider.Create(product);
+            return await _productProvider.CreateProduct(product);
         }
 
         public async Task<Product> UpdateProduct(ProductId productId, UpdateProductRequest updateProductRequest)
@@ -45,8 +45,8 @@ namespace product_service.Domain
             var productToUpdate = await _productProvider.GetVersion(productId, DateTime.Now);
             var updatedProduct = _productFactory.CreateProduct(productToUpdate, updateProductRequest);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
-            await _productProvider.Update(oldProductVersion);
-            return await _productProvider.Create(updatedProduct);
+            await _productProvider.UpdateProduct(oldProductVersion);
+            return await _productProvider.CreateProduct(updatedProduct);
         }
 
         public async Task<Product> DecreaseStock(ProductId productId, int amount)
@@ -58,15 +58,15 @@ namespace product_service.Domain
             var updatedProduct = productToUpdate.DecreaseStock(amount);
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
             
-            await _productProvider.Update(oldProductVersion);
-            return await _productProvider.Create(updatedProduct);
+            await _productProvider.UpdateProduct(oldProductVersion);
+            return await _productProvider.CreateProduct(updatedProduct);
         }
 
         public async Task<Product> DeactivateProduct(ProductId productId)
         {
             var product = await _productProvider.GetVersion(productId, DateTime.Now);
             product = product.Deactivate();
-            return await _productProvider.Update(product);
+            return await _productProvider.UpdateProduct(product);
         }
     }
 }

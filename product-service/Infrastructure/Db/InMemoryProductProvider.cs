@@ -33,7 +33,7 @@ namespace product_service.Infrastructure.Db
             return Task.FromResult(product);
         }
 
-        public Task<Product> Create(Product product)
+        public Task<Product> CreateProduct(Product product)
         {
             var newProduct = new Product(
                 product.VersionId ?? ProductVersionId.Of(_versionIdGenerator.GenerateId()), 
@@ -51,7 +51,7 @@ namespace product_service.Infrastructure.Db
             return Task.FromResult(newProduct);
         }
 
-        public Task<Product> Update(Product product)
+        public Task<Product> UpdateProduct(Product product)
         {
             var newProduct = new Product(
                 product.VersionId,

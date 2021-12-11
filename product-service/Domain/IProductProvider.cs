@@ -10,8 +10,8 @@ namespace product_service.Domain
         
         public Task<Product> GetVersion(ProductId id, DateTime timestamp);
         
-        public Task<Product> Create(Product product);
+        public Task<Product> CreateProduct(Product product);
 
-        public Task<Product> Update(Product product);
+        public Task<Product> UpdateProduct(Product product);
     }
 }

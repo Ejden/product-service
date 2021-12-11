@@ -10,9 +10,7 @@ namespace product_service.Infrastructure.Db.Models
         [BsonId]
         [BsonRepresentation(BsonType.String)]
         [BsonElement("versionId")]
-        #nullable enable
-        public string? VersionId { get; set; }
-        #nullable disable
+        public string VersionId { get; set; }
         
         [BsonElement("productId")]
         public string ProductId { get; set; }
@@ -38,10 +36,9 @@ namespace product_service.Infrastructure.Db.Models
         [BsonElement("price")]
         public MoneyDocument Price { get; set; }
 
-        public ProductDocument() {}
+        public ProductDocument() { }
 
-        #nullable enable
-        public ProductDocument(string? versionId, string? productId, string name, string description, ICollection<AttributeDocument> attributes, DateTime version, DateTime? activeTo, int stock, MoneyDocument price)
+        public ProductDocument(string versionId, string productId, string name, string description, ICollection<AttributeDocument> attributes, DateTime version, DateTime? activeTo, int stock, MoneyDocument price)
         {
             VersionId = versionId;
             ProductId = productId;
@@ -53,7 +50,6 @@ namespace product_service.Infrastructure.Db.Models
             Stock = stock;
             Price = price;
         }
-        #nullable disable
         
         public bool VersionActiveAt(DateTime timestamp)
         {
