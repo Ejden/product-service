@@ -24,9 +24,9 @@ namespace product_service.Infrastructure.Api.Dto
             return new ProductsDto(products.Select(ToDto).ToList());
         }
 
-        private static List<AttributeDto> ToDto(this Attributes attributes)
+        private static List<AttributeDto<string>> ToDto(this Attributes<string> attributes)
         {
-            return attributes.Select(attribute => new AttributeDto(attribute.Key, attribute.Value)).ToList();
+            return attributes.Select(attribute => new AttributeDto<string>(attribute.Key, attribute.Value)).ToList();
         }
 
         private static MoneyDto ToDto(this Money money)

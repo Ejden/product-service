@@ -2,17 +2,17 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace product_service.Infrastructure.Db.Models
 {
-    public class AttributeDocument
+    public class AttributeDocument<T>
     {
         [BsonElement("key")]
         public string Key { get; set; }
         
         [BsonElement("value")]
-        public string Value { get; set; }
+        public T Value { get; set; }
 
         public AttributeDocument() {}
 
-        public AttributeDocument(string key, string value)
+        public AttributeDocument(string key, T value)
         {
             Key = key;
             Value = value;

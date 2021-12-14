@@ -46,8 +46,6 @@ namespace product_service
             }
             
             app.ConfigureCustomExceptionMiddleware();
-
-            app.UseHttpsRedirection();
             
             app.UseRouting();
 

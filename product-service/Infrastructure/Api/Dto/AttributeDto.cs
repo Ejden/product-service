@@ -1,4 +1,4 @@
 ﻿namespace product_service.Infrastructure.Api.Dto
 {
-    public record AttributeDto(string Key, string Value);
+    public record AttributeDto<T>(string Key, T Value);
 }

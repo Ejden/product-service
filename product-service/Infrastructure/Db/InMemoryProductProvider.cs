@@ -27,7 +27,7 @@ namespace product_service.Infrastructure.Db
             var product = _products.Values.ToList().Find(product => product.ProductId == id && product.versionActiveAt(timestamp));
             if (product == null)
             {
-                throw new ProductNotFoundException("Product with id " + id.Raw + " not found");
+                throw new ProductNotFoundException(id);
             }
 
             return Task.FromResult(product);

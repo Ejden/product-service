@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace product_service.Domain
 {
-    public class Attributes : List<Attribute>
+    public class Attributes<T> : List<Attribute<T>>
     {
 
-        public Attributes(List<Attribute> attributes)
+        public Attributes(List<Attribute<T>> attributes)
         {
             attributes.ForEach(Add);
         }
@@ -19,5 +19,5 @@ namespace product_service.Domain
         }
     }
 
-    public record Attribute(string Key, string Value);
+    public record Attribute<T>(string Key, T Value);
 }

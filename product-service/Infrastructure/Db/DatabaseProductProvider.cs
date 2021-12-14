@@ -56,7 +56,7 @@ namespace product_service.Infrastructure.Db
             }
             catch (InvalidOperationException)
             {
-                throw new ProductNotFoundException($"Product with id {id.Raw} not found");
+                throw new ProductNotFoundException(id);
             }
         }
 

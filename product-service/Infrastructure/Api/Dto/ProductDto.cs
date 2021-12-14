@@ -7,7 +7,7 @@ namespace product_service.Infrastructure.Api.Dto
         string Id, 
         string Name,
         string Description,
-        List<AttributeDto> Attributes,
+        List<AttributeDto<string>> Attributes,
         DateTime Version,
         int Stock,
         MoneyDto Price

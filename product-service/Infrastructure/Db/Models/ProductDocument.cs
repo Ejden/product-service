@@ -22,7 +22,7 @@ namespace product_service.Infrastructure.Db.Models
         public string Description { get; set; }
 
         [BsonElement("attributes")]
-        public ICollection<AttributeDocument> Attributes { get; set; }
+        public ICollection<AttributeDocument<string>> Attributes { get; set; }
         
         [BsonElement("version")]
         public DateTime Version { get; set; }
@@ -38,7 +38,16 @@ namespace product_service.Infrastructure.Db.Models
 
         public ProductDocument() { }
 
-        public ProductDocument(string versionId, string productId, string name, string description, ICollection<AttributeDocument> attributes, DateTime version, DateTime? activeTo, int stock, MoneyDocument price)
+        public ProductDocument(
+            string versionId, 
+            string productId, 
+            string name, 
+            string description, 
+            ICollection<AttributeDocument<string>> attributes, 
+            DateTime version, 
+            DateTime? activeTo, 
+            int stock, 
+            MoneyDocument price)
         {
             VersionId = versionId;
             ProductId = productId;

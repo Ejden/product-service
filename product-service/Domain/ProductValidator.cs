@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.VisualBasic;
 using product_service.Infrastructure.Api.Requests;
 
 namespace product_service.Domain

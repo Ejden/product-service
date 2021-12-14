@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using product_service.Domain;
-using Attribute = product_service.Domain.Attribute;
 
 namespace product_service.Infrastructure.Db.Models
 {
@@ -23,9 +22,9 @@ namespace product_service.Infrastructure.Db.Models
             );
         }
 
-        private static Attributes ToDomain(ICollection<AttributeDocument> attributes)
+        private static Attributes<string> ToDomain(ICollection<AttributeDocument<string>> attributes)
         {
-            return new Attributes(attributes.Select(attribute => new Attribute(attribute.Key, attribute.Value)).ToList());
+            return new Attributes<string>(attributes.Select(attribute => new Attribute<string>(attribute.Key, attribute.Value)).ToList());
         }
 
         private static Money ToDomain(MoneyDocument money)
@@ -48,10 +47,10 @@ namespace product_service.Infrastructure.Db.Models
             );
         }
 
-        private static ICollection<AttributeDocument> ToDocument(Attributes attributes)
+        private static ICollection<AttributeDocument<string>> ToDocument(Attributes<string> attributes)
         {
-            return attributes.GetAttributes().OfType<Attribute>()
-                .Select(it => new AttributeDocument(it.Key, it.Value))
+            return attributes.GetAttributes().OfType<Attribute<string>>()
+                .Select(it => new AttributeDocument<string>(it.Key, it.Value))
                 .ToList();
         }
 

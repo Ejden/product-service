@@ -13,7 +13,7 @@ namespace product_service.Domain
                 null,
                 newProductRequest.Name,
                 newProductRequest.Description,
-                new Attributes(newProductRequest.Attributes.Select(attr => new Attribute(attr.Key, attr.Value)).ToList()),
+                new Attributes<string>(newProductRequest.Attributes.Select(attr => new Attribute<string>(attr.Key, attr.Value)).ToList()),
                 DateTime.Now,
                 newProductRequest.Stock,
                 new Money(newProductRequest.Price.Amount, Enum.Parse<Currency>(newProductRequest.Price.Currency))
@@ -27,7 +27,7 @@ namespace product_service.Domain
                 product.ProductId,
                 updateProductRequest.Name,
                 updateProductRequest.Description,
-                new Attributes(updateProductRequest.Attributes.Select(attr => new Attribute(attr.Key, attr.Value)).ToList()),
+                new Attributes<string>(updateProductRequest.Attributes.Select(attr => new Attribute<string>(attr.Key, attr.Value)).ToList()),
                 DateTime.Now,
                 updateProductRequest.Stock,
                 new Money(updateProductRequest.Price.Amount, Enum.Parse<Currency>(updateProductRequest.Price.Currency))

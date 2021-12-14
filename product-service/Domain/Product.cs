@@ -4,25 +4,25 @@ namespace product_service.Domain
 {
     public class Product
     {
-        public ProductVersionId VersionId { get; }
-        
-        public ProductId ProductId { get; }
-        
-        public string Name { get; }
-        
-        public string Description { get; }
-        
-        public Attributes Attributes { get; }
+        public readonly ProductVersionId VersionId;
 
-        public DateTime Version { get; }
-        
-        public DateTime? ActiveTo { get; }
+        public readonly ProductId ProductId;
 
-        public int Stock { get; }
+        public readonly string Name;
 
-        public Money Price { get; }
+        public readonly string Description;
+
+        public readonly Attributes<string> Attributes;
+
+        public readonly DateTime Version;
+
+        public readonly DateTime? ActiveTo;
+
+        public readonly int Stock;
+
+        public readonly Money Price;
         
-        public Product(ProductVersionId versionId, ProductId productId, string name, string description, Attributes attributes, DateTime version, int stock, Money price)
+        public Product(ProductVersionId versionId, ProductId productId, string name, string description, Attributes<string> attributes, DateTime version, int stock, Money price)
         {
             VersionId = versionId;
             ProductId = productId;
@@ -35,7 +35,7 @@ namespace product_service.Domain
             Price = price;
         }
         
-        public Product(ProductVersionId versionId, ProductId productId, string name, string description, Attributes attributes, DateTime version, DateTime? activeTo, int stock, Money price)
+        public Product(ProductVersionId versionId, ProductId productId, string name, string description, Attributes<string> attributes, DateTime version, DateTime? activeTo, int stock, Money price)
         {
             VersionId = versionId;
             ProductId = productId;

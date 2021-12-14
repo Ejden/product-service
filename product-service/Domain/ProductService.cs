@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using product_service.Infrastructure.Api.Requests;
-using product_service.Infrastructure.Db.Models;
 
 namespace product_service.Domain
 {
@@ -14,12 +13,15 @@ namespace product_service.Domain
         private readonly ProductValidator _productValidator;
         
         private readonly ProductFactory _productFactory;
+
+        private static Semaphore _semaphore;
         
         public ProductService(IProductProvider productProvider, ProductValidator productValidator, ProductFactory productFactory)
         {
             _productProvider = productProvider;
             _productValidator = productValidator;
             _productFactory = productFactory;
+            _semaphore = new Semaphore(1, 1);
         }
 
         public async Task<ICollection<Product>> GetProducts(bool onlyActive)
@@ -51,6 +53,8 @@ namespace product_service.Domain
 
         public async Task<Product> DecreaseStock(ProductId productId, int amount)
         {
+            _semaphore.WaitOne();
+            
             var productToUpdate = await _productProvider.GetVersion(productId, DateTime.Now);
             
             _productValidator.ValidateStockDecrease(productToUpdate, amount);
@@ -59,7 +63,11 @@ namespace product_service.Domain
             var oldProductVersion = productToUpdate.Deactivate(updatedProduct.Version);
             
             await _productProvider.UpdateProduct(oldProductVersion);
-            return await _productProvider.CreateProduct(updatedProduct);
+            var product = await _productProvider.CreateProduct(updatedProduct);
+            
+            _semaphore.Release();
+            
+            return product;
         }
 
         public async Task<Product> DeactivateProduct(ProductId productId)
