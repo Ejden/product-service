@@ -87,3 +87,4 @@ C:\Users\adria\RiderProjects\product-service\product-service\obj\Debug\net5.0\pr
 C:\Users\adria\RiderProjects\product-service\product-service\obj\Debug\net5.0\ref\product-service.dll
 C:\Users\adria\RiderProjects\product-service\product-service\obj\Debug\net5.0\product-service.pdb
 C:\Users\adria\RiderProjects\product-service\product-service\obj\Debug\net5.0\product-service.genruntimeconfig.cache
+C:\Users\adria\RiderProjects\product-service\product-service\bin\Debug\net5.0\appsettings.Test.json
