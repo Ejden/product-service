@@ -14,18 +14,22 @@ namespace product_service.Infrastructure.Api
     {
 
         private readonly ILogger<ProductEndpoint> _logger;
+        
         private readonly ProductService _productService;
+
+        private readonly ProductMapper _productMapper;
 
         public ProductEndpoint(ILogger<ProductEndpoint> logger, ProductService productService)
         {
             _logger = logger;
             _productService = productService;
+            _productMapper = new ProductMapper();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProducts([FromQuery] bool onlyActive = true)
         {
-            return Ok(ProductMapper.ToDto(await _productService.GetProducts(onlyActive)));
+            return Ok(_productMapper.ToDto(await _productService.GetProducts(onlyActive)));
         }
 
         #nullable enable
@@ -33,7 +37,7 @@ namespace product_service.Infrastructure.Api
         [Route("{productId}")]
         public async Task<IActionResult> GetProductVersion(string productId, [FromQuery] string? version)
         {
-            return Ok(ProductMapper.ToDto(await _productService.GetProductVersion(
+            return Ok(_productMapper.ToDto(await _productService.GetProductVersion(
                 ProductId.Of(productId),
                 version == null ? DateTime.Now : DateTime.Parse(version))
             ));
@@ -44,7 +48,7 @@ namespace product_service.Infrastructure.Api
         [Route("{productId}")]
         public async Task<IActionResult> UpdateProduct(string productId, [FromBody] UpdateProductRequest request)
         {
-            return Ok(ProductMapper.ToDto(await _productService.UpdateProduct(ProductId.Of(productId), request)));
+            return Ok(_productMapper.ToDto(await _productService.UpdateProduct(ProductId.Of(productId), request)));
         }
 
         [HttpDelete]
@@ -59,13 +63,13 @@ namespace product_service.Infrastructure.Api
         [Route("{productId}/stock")]
         public async Task<IActionResult> DecreaseStock(string productId, [FromBody] StockDecreaseRequest request)
         {
-            return Ok(ProductMapper.ToDto(await _productService.DecreaseStock(ProductId.Of(productId), request.DecreaseBy)));
+            return Ok(_productMapper.ToDto(await _productService.DecreaseStock(ProductId.Of(productId), request.DecreaseBy)));
         }
         
         [HttpPost]
         public async Task<IActionResult> CreateProduct(NewProductRequest request)
         {
-            return Ok(ProductMapper.ToDto(await _productService.CreateProduct(request)));
+            return Ok(_productMapper.ToDto(await _productService.CreateProduct(request)));
         }
     }
 }

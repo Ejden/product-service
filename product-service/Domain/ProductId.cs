@@ -19,10 +19,12 @@ namespace product_service.Domain
             return Raw;
         }
 
+        #nullable enable
         public virtual bool Equals(ProductId? other)
         {
             if (other == null) return false;
             return Raw == other.Raw;
         }
+        #nullable disable
     }
 }

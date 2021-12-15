@@ -4,34 +4,39 @@ using product_service.Domain;
 
 namespace product_service.Infrastructure.Api.Dto
 {
-    public static class ProductMapper
+    public class ProductMapper : IDomainToDtoMapper<Product, ProductDto>
     {
-        public static ProductDto ToDto(Product product)
+        public ProductDto ToDto(Product product)
         {
             return new ProductDto(
                 product.ProductId.Raw,
                 product.Name,
                 product.Description, 
-                product.Attributes.ToDto(),
+                ToDto(product.Attributes),
                 product.Version,
                 product.Stock,
-                product.Price.ToDto()
+                ToDto(product.Price)
             );
         }
 
-        public static ProductsDto ToDto(ICollection<Product> products)
+        public ProductsDto ToDto(ICollection<Product> products)
         {
             return new ProductsDto(products.Select(ToDto).ToList());
         }
 
-        private static List<AttributeDto<string>> ToDto(this Attributes<string> attributes)
+        private List<AttributeDto<string>> ToDto(Attributes<string> attributes)
         {
             return attributes.Select(attribute => new AttributeDto<string>(attribute.Key, attribute.Value)).ToList();
         }
 
-        private static MoneyDto ToDto(this Money money)
+        private static MoneyDto ToDto(Money money)
         {
             return new MoneyDto(money.Amount, money.Currency.ToString());
         }
+    }
+
+    public interface IDomainToDtoMapper<in T, out TR>
+    {
+        public TR ToDto(T t);
     }
 }
